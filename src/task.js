@@ -12,7 +12,7 @@ const Task = (props) => {
               <span className="delete">Delete</span>
             </button>
           </div>  
-        </li>
+    </li>
   )
 }
 

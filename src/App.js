@@ -6,9 +6,32 @@ import Task from './task';
 function App() {
   const [toDoList, setToDoList] = useState([])
   const [newTask, setNewTask] = useState("")
+  const [isVisible, setIsInvisible] = useState(true)
 
   const handleChange = (event) => {
     setNewTask(event.target.value);
+  }
+
+  const searchToDo = () => {
+    setIsInvisible((prev) => !prev)
+    console.log(isVisible);
+      // console.log(toDoList[1].taskName);
+      const searched = toDoList.filter((search, key) =>{
+          console.log(search.taskName);
+          if(newTask === search.taskName) {
+            // console.log(search.taskName);
+            return (
+              <Task key={key}
+              taskName={search.taskName} 
+              id={search.id} 
+              completed={search.completed}
+              dels={dels}
+              colorize={colorize}
+              />
+            )
+          }
+      })
+     
   }
 
   const addTask = () => {
@@ -54,6 +77,7 @@ function App() {
   const clearToDo = () => {
     setToDoList([])
   }
+  
 
   // ************   FOR HTML   *****************
   return (
@@ -72,12 +96,13 @@ function App() {
         <div className="inputs-buttons-div">
             <button type="submit" className="toDoBtn" onClick={addTask
             }>Add To Do</button>
-            <button type="submit" className="toDoBtn">Search To Do</button>
+            <button type="submit" className="toDoBtn" onClick={searchToDo}>Search To Do</button>
             <button id="clear" onClick={clearToDo} className="toDoBtn">Clear To Do List</button>
         </div>
     </div>
     <ul className="item-list">
-    {toDoList.map((task, key)=>{
+    {isVisible && 
+    toDoList.map((task, key)=>{
               return (
                 <Task key={key}
                 taskName={task.taskName} 
@@ -88,7 +113,10 @@ function App() {
                 />
               )
                       
-            })}
+            })
+            }
+      {!isVisible && searchToDo}
+    
       </ul>
     </div>
   );
