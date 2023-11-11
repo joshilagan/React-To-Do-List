@@ -6,41 +6,39 @@ import Task from './task';
 function App() {
   const [toDoList, setToDoList] = useState([])
   const [newTask, setNewTask] = useState("")
-  const [isVisible, setIsInvisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(true)
+  const [found, setFound] = useState([])
+  
 
   const handleChange = (event) => {
     setNewTask(event.target.value);
   }
+  // const blank = {
 
+  // }
   const searchToDo = () => {
-    setIsInvisible((prev) => !prev)
-    console.log(isVisible);
-      // console.log(toDoList[1].taskName);
-      const searched = toDoList.filter((search, key) =>{
-          console.log(search.taskName);
-          if(newTask === search.taskName) {
-            // console.log(search.taskName);
-            return (
-              <Task key={key}
-              taskName={search.taskName} 
-              id={search.id} 
-              completed={search.completed}
-              dels={dels}
-              colorize={colorize}
-              />
-            )
-          }
-      })
-     
+    
+    isVisible && setIsVisible(false)
+    
+    const search = toDoList.find(item => newTask === item.taskName);
+    if (found.length > 0 ){
+      setFound([])
+    } else {
+      if (search) return (        
+        setFound([...found,search])           
+        )
+      }  
   }
+  
 
   const addTask = () => {
+    !isVisible && setIsVisible(true)
+    setFound([])
     const task = {
       id: toDoList.length === 0 ? 1 : toDoList[toDoList.length - 1].id + 1,
       taskName: newTask,
       completed: false,
     }
-
     //push the task variable to the todoList using spread operator
     setToDoList([...toDoList, task])
   }
@@ -78,8 +76,7 @@ function App() {
     setToDoList([])
   }
   
-
-  // ************   FOR HTML   *****************
+   // ************   FOR HTML   *****************
   return (
     <div className="todo-container">
     <header>   
@@ -115,8 +112,19 @@ function App() {
                       
             })
             }
-      {!isVisible && searchToDo}
-    
+      {!isVisible && found.map((task, key)=>{
+              return (
+                <Task key={key}
+                taskName={task.taskName} 
+                id={task.id} 
+                completed={task.completed}
+                dels={dels}
+                colorize={colorize}
+                />
+              )
+                      
+            })}
+     
       </ul>
     </div>
   );
